@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiverCare - Patient Registration</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #173b35;
+        }
+        .container {
+            max-width: 650px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px #00000012;
+        }
+        h1 { color: #176b58; }
+        label {
+            display: block;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+        input, select {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            background: #176b58;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #105143; }
+        .note { color: #64748b; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Patient Registration</h1>
+        <p>Register the patient before laboratory assessment.</p>
+
+        <form action="/register" method="POST">
+            <label>Patient Name</label>
+            <input type="text" name="patient_name" required>
+
+            <label>Age</label>
+            <input type="number" name="age" min="1" max="120" required>
+
+            <label>Gender</label>
+            <select name="gender" required>
+                <option value="">Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <button type="submit">Register Patient →</button>
+        </form>
+
+        <p class="note">
+            Educational demonstration only. Protect patient information.
+        </p>
+    </div>
+</body>
+</html>

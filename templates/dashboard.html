@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+# -----------------------------------
+# 9. All Registered Patients
+# -----------------------------------
+
+@app.route("/patients")
+def all_patients():
+
+    conn = None
+
+    try:
+        conn = get_db_connection()
+
+        id_column = get_patient_id_column(conn)
+
+        patients = conn.execute(
+            f"SELECT * FROM patients ORDER BY {id_column} DESC"
+        ).fetchall()
+
+        return render_template(
+            "patients.html",
+            patients=patients,
+            id_column=id_column
+        )
+
+    except Exception:
+        app.logger.exception("Patients page failed")
+        return "Could not load patients.", 500
+
+    finally:
+        if conn is not None:
+            conn.close()
+
+    <title>LiverCare Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f2f7f5;
+            color: #263b32;
+        }
+
+        header {
+            background: #087f5b;
+            color: white;
+            padding: 22px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 26px;
+        }
+
+        header p {
+            margin-top: 5px;
+            font-size: 13px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 18px;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 1050px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #687b71;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #087f5b;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 {
+            color: #687b71;
+            font-size: 15px;
+        }
+
+        .stat-card h2 {
+            font-size: 32px;
+            margin-top: 12px;
+            color: #087f5b;
+        }
+
+        .result-card h2 {
+            margin-bottom: 20px;
+        }
+
+        .result {
+            padding: 20px;
+            border-radius: 9px;
+            background: #e8f5ee;
+            color: #087443;
+            font-size: 19px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .patient-info p {
+            margin: 12px 0;
+            color: #52665b;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #087f5b;
+            color: white;
+            text-decoration: none;
+            padding: 13px 20px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #056346;
+        }
+
+        .secondary {
+            background: #e3eee8;
+            color: #087f5b;
+        }
+
+        .secondary:hover {
+            background: #d2e7da;
+        }
+
+        .notice {
+            font-size: 13px;
+            color: #687b71;
+            line-height: 1.6;
+            margin-top: 18px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #75847c;
+            font-size: 13px;
+        }
+
+        @media(max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav a {
+                margin-left: 0;
+                margin-right: 12px;
+            }
+
+            .welcome h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>🌿 LiverCare</h1>
+        <p>Patient Management & Health Assessment</p>
+    </div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/register">Register Patient</a>
+        <a href="/patients">All Patients</a>
+    </nav>
+</header>
+
+<main>
+
+    <section class="welcome">
+        <h2>Healthcare Dashboard</h2>
+        <p>Welcome to LiverCare Patient Management System.</p>
+    </section>
+
+    <section class="stats">
+        <div class="stat-card">
+            <h3>Total Registered Patients</h3>
+            <h2>{{ total_patients | default(0) }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <h3>Application Status</h3>
+            <h2 style="font-size:22px;">Active</h2>
+        </div>
+    </section>
+
+    {% if prediction %}
+
+    <section class="card result-card">
+
+        <h2>🔬 Liver Disease Prediction Result</h2>
+
+        <div class="patient-info">
+            <p>
+                <strong>Patient Name:</strong>
+                {{ patient_name | default("Registered Patient") }}
+            </p>
+
+            <p>
+                <strong>Patient ID:</strong>
+                {{ patient_id | default("N/A") }}
+            </p>
+        </div>
+
+        <div class="result">
+            {{ prediction }}
+        </div>
+
+        <p class="notice">
+            This is an educational machine learning prediction,
+            not a confirmed medical diagnosis. Please consult a
+            qualified healthcare professional for medical advice.
+        </p>
+
+    </section>
+
+    {% else %}
+
+    <section class="card">
+        <h2>Welcome to LiverCare</h2>
+
+        <p style="margin-top:12px; color:#687b71;">
+            Register a patient and complete the laboratory
+            assessment to generate a machine learning prediction.
+        </p>
+
+    </section>
+
+    {% endif %}
+
+    <section class="card">
+        <h2>Patient Management</h2>
+
+        <div class="buttons">
+            <a href="/register" class="btn">
+                + Register New Patient
+            </a>
+
+            {% if patient_id %}
+            <a href="/assessment/{{ patient_id }}" class="btn secondary">
+                New Assessment
+            </a>
+            {% endif %}
+
+            <a href="/dashboard" class="btn secondary">
+                Dashboard
+            </a>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 LiverCare | Educational Healthcare ML Project</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiverCare - Lab Assessment</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0fdf4;
+            margin: 0;
+            padding: 30px 15px;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px #00000012;
+        }
+
+        h1 {
+            color: #15803d;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            color: #64748b;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 13px;
+            background: #15803d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #166534;
+        }
+
+        .note {
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 550px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🩺 LiverCare</h1>
+        <h2>Laboratory Assessment</h2>
+        <p>Enter patient laboratory values</p>
+
+        <form action="/predict" method="POST">
+            <div class="grid">
+                <div>
+                    <label>Age</label>
+                    <input type="number" name="Age" min="1" max="120" required>
+                </div>
+
+                <div>
+                    <label>Gender</label>
+                    <select name="Gender" required>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Total Bilirubin</label>
+                    <input type="number" step="any" name="Total_Bilirubin" required>
+                </div>
+
+                <div>
+                    <label>Direct Bilirubin</label>
+                    <input type="number" step="any" name="Direct_Bilirubin" required>
+                </div>
+
+                <div>
+                    <label>Alkaline Phosphotase</label>
+                    <input type="number" step="any" name="Alkaline_Phosphotase" required>
+                </div>
+
+                <div>
+                    <label>Alamine Aminotransferase</label>
+                    <input type="number" step="any" name="Alamine_Aminotransferase" required>
+                </div>
+
+                <div>
+                    <label>Aspartate Aminotransferase</label>
+                    <input type="number" step="any" name="Aspartate_Aminotransferase" required>
+                </div>
+
+                <div>
+                    <label>Total Proteins</label>
+                    <input type="number" step="any" name="Total_Proteins" required>
+                </div>
+
+                <div>
+                    <label>Albumin</label>
+                    <input type="number" step="any" name="Albumin" required>
+                </div>
+
+                <div>
+                    <label>Albumin and Globulin Ratio</label>
+                    <input type="number" step="any" name="Albumin_and_Globulin_Ratio" required>
+                </div>
+            </div>
+
+            <button type="submit">Submit Lab Values</button>
+        </form>
+
+        <div class="note">
+            Educational demonstration only. This model does not provide a medical diagnosis.
+        </div>
+    </div>
+</body>
+</html>

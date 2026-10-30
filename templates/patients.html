@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>All Patients - LiverCare</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f2f7f5;
+            color: #263b32;
+        }
+
+        header {
+            background: #087f5b;
+            color: white;
+            padding: 22px 7%;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        .count {
+            color: #087f5b;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5eee9;
+        }
+
+        th {
+            background: #e8f5ee;
+            color: #087f5b;
+        }
+
+        tr:hover {
+            background: #f7fbf8;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #087f5b;
+            color: white;
+            padding: 9px 13px;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            color: #087f5b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .empty {
+            padding: 25px;
+            text-align: center;
+            color: #687b71;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🌿 LiverCare</h1>
+    <p>Patient Management System</p>
+</header>
+
+<main>
+
+    <div class="card">
+
+        <h2>All Registered Patients</h2>
+
+        <p>Total Registered Patients</p>
+
+        <div class="count">
+            {{ patients|length }}
+        </div>
+
+        <div class="table-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Patient ID</th>
+                        <th>Patient Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Registration Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for patient in patients %}
+
+                    <tr>
+                        <td>
+                            {{ patient[id_column] }}
+                        </td>
+
+                        <td>
+                            {{ patient['patient_name'] }}
+                        </td>
+
+                        <td>
+                            {{ patient['age'] }}
+                        </td>
+
+                        <td>
+                            {{ patient['gender'] }}
+                        </td>
+
+                        <td>
+                            {{ patient['created_at']|default('N/A', true) }}
+                        </td>
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="5" class="empty">
+                            No patients registered yet.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+        </div>
+
+        <a href="/dashboard" class="back">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+</main>
+
+</body>
+</html>

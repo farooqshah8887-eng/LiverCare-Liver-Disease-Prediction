@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LiverCare | Patient Dashboard</title>
+<style>
+:root {
+  --green:#123c32;
+  --green2:#1d5748;
+  --mint:#d9f5e9;
+  --accent:#40bd91;
+  --bg:#f4f8f6;
+  --text:#1e302d;
+  --muted:#7c8d88;
+  --border:#e6eeea;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
+.app{display:flex;min-height:100vh}
+.sidebar{width:245px;flex-shrink:0;background:var(--green);color:#eaf7f1;padding:25px 15px;display:flex;flex-direction:column}
+.logo{font-size:23px;font-weight:750;padding:5px 10px}
+.logo span{color:#66ddb2}
+.sublogo{font-size:9px;letter-spacing:1.5px;color:#91b9aa;padding:5px 11px 28px}
+.search{background:#244f43;border:1px solid #326354;border-radius:8px;padding:11px;color:#c6ded4;font-size:12px;margin:0 3px 23px}
+.nav-label{font-size:9px;letter-spacing:1.6px;color:#82aa9a;margin:12px 12px}
+.nav{padding:12px;border-radius:8px;font-size:12px;color:#c7ded5;margin:3px 0}
+.nav.active{background:#28604e;color:#83f0c5;box-shadow:inset 3px 0 #63e0b1}
+.nav span{display:inline-block;width:25px;font-size:15px}
+.side-bottom{margin-top:auto;background:#1b493d;border:1px solid #326354;border-radius:10px;padding:13px;font-size:11px;line-height:1.8;color:#c5ded4}
+.dot{color:#67e1b2}
+main{flex:1;min-width:0}
+.topbar{height:67px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 30px}
+.breadcrumb{font-size:11px;color:#8a9a94}
+.user{display:flex;align-items:center;gap:9px;font-size:11px;font-weight:600}
+.avatar{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;background:var(--mint);color:var(--green2)}
+.content{max-width:1180px;margin:auto;padding:30px}
+.overline{font-size:10px;color:#23916d;font-weight:800;letter-spacing:1.7px}
+h1{font-size:29px;letter-spacing:-.7px;margin:9px 0 6px}
+.desc{color:var(--muted);font-size:12px;line-height:1.7;margin:0}
+.welcome{margin:24px 0;background:linear-gradient(110deg,#e1f7ed,#f1faf6);border:1px solid #d8eee4;border-radius:13px;padding:22px 24px;display:flex;justify-content:space-between;align-items:center}
+.welcome h2{margin:0 0 8px;font-size:17px;color:#205943}
+.welcome p{margin:0;color:#68877a;font-size:12px;line-height:1.7}
+.welcome-icon{font-size:32px;color:#38a980;background:#ffffff99;padding:13px;border-radius:12px}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:22px}
+.metric{background:white;border:1px solid var(--border);border-radius:11px;padding:16px}
+.metric-label{font-size:10px;color:#80918a}
+.metric-value{font-size:17px;font-weight:750;margin-top:9px}
+.metric-foot{font-size:10px;color:#24916d;margin-top:7px}
+.card{background:white;border:1px solid var(--border);border-radius:13px;overflow:hidden;box-shadow:0 5px 20px #193c2e06}
+.card-head{padding:22px 24px;border-bottom:1px solid #edf2ef}
+.card-head h2{font-size:17px;margin:0}
+.card-head p{font-size:11px;color:var(--muted);margin:7px 0 0}
+.formbody{padding:24px}
+.group{font-size:10px;font-weight:800;letter-spacing:1.3px;color:#668077;margin-bottom:17px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:19px 22px}
+.field label{display:block;font-size:11px;font-weight:650;margin-bottom:8px}
+.field input,.field select{width:100%;border:1px solid #dce7e1;background:#fbfdfc;border-radius:8px;padding:13px;font-size:12px;color:#30483e;outline:none;transition:.2s}
+.field input:focus,.field select:focus{border-color:#36af85;box-shadow:0 0 0 3px #36af851a;background:white}
+.field input::placeholder{color:#a6b4ae}
+hr{border:0;border-top:1px solid #edf2ef;margin:25px 0}
+.actions{display:flex;justify-content:space-between;align-items:center;gap:18px}
+.note{font-size:10px;color:#85948e;line-height:1.7}
+button{border:0;border-radius:8px;background:var(--green2);color:white;padding:14px 22px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s}
+button:hover{background:#26785d;transform:translateY(-1px)}
+footer{text-align:center;padding:22px 5px;color:#94a29c;font-size:10px;line-height:1.8}
+@media(max-width:850px){.sidebar{width:190px}.content{padding:22px}.metrics{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.sidebar{width:66px;padding:20px 7px}.logo{font-size:0;padding:5px}.logo span{font-size:19px}.sublogo,.search,.nav-label,.side-bottom{display:none}.nav{font-size:0;text-align:center;padding:13px 3px;margin-top:12px}.nav span{font-size:17px;width:auto}.topbar{padding:0 12px}.content{padding:18px 12px}h1{font-size:24px}.metrics{grid-template-columns:1fr}.welcome-icon{display:none}.formbody,.card-head{padding:17px}.grid{grid-template-columns:1fr}.actions{align-items:stretch;flex-direction:column}button{width:100%}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="logo">✚ Liver<span>Care</span></div>
+  <div class="sublogo">HEALTH INTELLIGENCE</div>
+  <div class="search">⌕ &nbsp; Patient workspace</div>
+  <div class="nav-label">MAIN MENU</div>
+  <div class="nav"> <span>▦</span> Dashboard</div>
+  <div class="nav active"><span>♡</span> Liver Assessment</div>
+  <div class="nav"><span>▤</span> Patient Details</div>
+  <div class="nav-label">GENERAL</div>
+  <div class="nav"><span>ⓘ</span> About Project</div>
+  <div class="side-bottom"><span class="dot">●</span> Project workspace<br>Machine Learning · Flask<br>Academic demonstration</div>
+</aside>
+
+<main>
+<header class="topbar">
+  <div class="breadcrumb">Workspace &nbsp;›&nbsp; Liver Assessment</div>
+  <div class="user"><div class="avatar">LC</div> LiverCare Project</div>
+</header>
+
+<div class="content">
+  <div class="overline">HEALTH ANALYTICS PLATFORM</div>
+  <h1>Liver Health Dashboard</h1>
+  <p class="desc">Patient information and laboratory assessment workspace.</p>
+
+  <section class="welcome">
+    <div><h2>Welcome to LiverCare ✦</h2>
+    <p>Enter patient details and laboratory measurements below.<br>Complete all fields to run the model assessment.</p></div>
+    <div class="welcome-icon">✚</div>
+  </section>
+
+  <section class="metrics">
+    <div class="metric"><div class="metric-label">ASSESSMENT TYPE</div><div class="metric-value">Liver Health</div><div class="metric-foot">● Classification project</div></div>
+    <div class="metric"><div class="metric-label">MODEL WORKFLOW</div><div class="metric-value">Machine Learning</div><div class="metric-foot">● Trained model pipeline</div></div>
+    <div class="metric"><div class="metric-label">APPLICATION</div><div class="metric-value">Flask Web App</div><div class="metric-foot">● Local demonstration</div></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Patient Information</h2><p>Patient profile and laboratory measurements</p></div>
+    <div class="formbody">
+      <form action="/predict" method="POST">
+        <div class="group">01 &nbsp; PATIENT DETAILS</div>
+        <div class="grid">
+          <div class="field"><label>Age (years)</label><input type="number" name="Age" min="1" max="120" placeholder="e.g. 45" required></div>
+          <div class="field"><label>Gender</label><select name="Gender" required><option value="">Select gender</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
+        </div>
+        <hr>
+        <div class="group">02 &nbsp; LABORATORY MEASUREMENTS</div>
+        <div class="grid">
+          <div class="field"><label>Total Bilirubin</label><input type="number" step="any" min="0" name="Total_Bilirubin" placeholder="Enter value" required></div>
+          <div class="field"><label>Direct Bilirubin</label><input type="number" step="any" min="0" name="Direct_Bilirubin" placeholder="Enter value" required></div>
+          <div class="field"><label>Alkaline Phosphotase</label><input type="number" step="any" min="0" name="Alkaline_Phosphotase" placeholder="Enter value" required></div>
+          <div class="field"><label>Alamine Aminotransferase (ALT)</label><input type="number" step="any" min="0" name="Alamine_Aminotransferase" placeholder="Enter value" required></div>
+          <div class="field"><label>Aspartate Aminotransferase (AST)</label><input type="number" step="any" min="0" name="Aspartate_Aminotransferase" placeholder="Enter value" required></div>
+          <div class="field"><label>Total Proteins</label><input type="number" step="any" min="0" name="Total_Proteins" placeholder="Enter value" required></div>
+          <div class="field"><label>Albumin</label><input type="number" step="any" min="0" name="Albumin" placeholder="Enter value" required></div>
+          <div class="field"><label>Albumin and Globulin Ratio</label><input type="number" step="any" min="0" name="Albumin_and_Globulin_Ratio" placeholder="Enter value" required></div>
+        </div>
+        <hr>
+        <div class="actions">
+          <div class="note">Educational demonstration only.<br>Not intended for clinical decisions.</div>
+          <button type="submit">Run Assessment &nbsp; →</button>
+        </div>
+      </form>
+    </div>
+  </section>
+  <footer>LiverCare · Academic Machine Learning Project<br>Not a medical diagnosis or substitute for professional medical advice.</footer>
+</div>
+</main>
+</div>
+</body>
+</html>
